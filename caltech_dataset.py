@@ -47,8 +47,6 @@ class Caltech(VisionDataset):
                     label_counter += 1 #increment label counter
                 
         self.dataset = pd.DataFrame({'path': img_paths, 'label': label})
-        self.length = len(self.dataset)
-        print(self.length)
 
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
@@ -84,4 +82,4 @@ class Caltech(VisionDataset):
         return length
         
         '''
-        return self.length
+        return len(self.dataset)
