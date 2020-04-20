@@ -5,7 +5,8 @@ from PIL import Image
 import os
 import os.path
 import sys
-
+import pandas as pd
+import numpy as np
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
@@ -18,13 +19,34 @@ class Caltech(VisionDataset):
     def __init__(self, root, split='train', transform=None, target_transform=None):
         super(Caltech, self).__init__(root, transform=transform, target_transform=target_transform)
 
-        self.split = split # This defines the split you are going to use
-                           # (split files are called 'train.txt' and 'test.txt')
-        self.label  = 0
-        self.labels ={}
+        self.split = split + '.txt' # This defines the split you are going to use
+                           # (split files are called 'train.txt' and 'test.txt'
+            
+        self.split_path = os.path.join(self.root.split('/')[0], self.split) #train.txt file path
+            
         self.root = root
         self.transform = transform
-        self.target_transform = traget_transform
+        self.target_transform = target_transform
+        
+        label_counter  = 0
+        labels_dict ={}
+        labels = []
+        img_paths = []
+           
+        paths = np.loadtxt(self.split_path, dtype=str)
+        for path in paths:
+            fields = path.split('/')
+            if fields[0]!='BACKGROUND_Google': #drop BACKGROUND_Google folder
+                if fields[0] in labels_dict: #if label already met
+                    labels.append(labels_dict[fields[0]]) #assign corresponding label
+                    img_paths.append(path) #assign corresponding image path
+                else:
+                    labels_dict[fields[0]] = label_counter; #add new label to the dictionary
+                    labels.append(label_counter); #assign corresponding label
+                    img_paths.append(path)
+                    label_counter += 1 #increment label counter
+                
+        self.dataset = pd.DataFrame({'path': img_paths, 'label': label})
 
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
@@ -44,10 +66,8 @@ class Caltech(VisionDataset):
         Returns:
             tuple: (sample, target) where target is class_index of the target class.
         '''
-
-        image, label = ... # Provide a way to access image and label via index
-                           # Image should be a PIL Image
-                           # label can be int
+        image = pil_loader(os.path.join(self.split_path, self.dataset.iloc[ind, 0]))
+        label = self.dataset.iloc[ind, 1]
 
         # Applies preprocessing when accessing the image
         if self.transform is not None:
@@ -56,9 +76,10 @@ class Caltech(VisionDataset):
         return image, label
 
     def __len__(self):
-        '''
-        The __len__ method returns the length of the dataset
-        It is mandatory, as this is used by several other components
+        
         '''
         length = ... # Provide a way to get the length (number of elements) of the dataset
         return length
+        
+        return len(self.dataset)
+        
