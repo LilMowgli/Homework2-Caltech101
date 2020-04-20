@@ -20,6 +20,11 @@ class Caltech(VisionDataset):
 
         self.split = split # This defines the split you are going to use
                            # (split files are called 'train.txt' and 'test.txt')
+        self.label  = 0
+        self.labels ={}
+        self.root = root
+        self.transform = transform
+        self.target_transform = traget_transform
 
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
