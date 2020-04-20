@@ -35,7 +35,7 @@ class Caltech(VisionDataset):
            
         paths = np.loadtxt(self.split_path, dtype=str) #array with paths in the form 'class_name/imagexxxx.jpg'
         for path in paths:
-            fields = path.split('/') #fields[0] = class_name
+            fieldlabes = path.split('/') #fields[0] = class_name
             if fields[0]!='BACKGROUND_Google': #drop BACKGROUND_Google folder
                 if fields[0] in labels_dict: #if label already met
                     labels.append(labels_dict[fields[0]]) #assign corresponding label
@@ -46,7 +46,7 @@ class Caltech(VisionDataset):
                     img_paths.append(path) #assign corresponding image path
                     label_counter += 1 #increment label counter
                 
-        self.dataset = pd.DataFrame({'path': img_paths, 'label': label})
+        self.dataset = pd.DataFrame({'path': img_paths, 'label': labels})
 
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
