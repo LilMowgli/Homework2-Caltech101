@@ -65,8 +65,8 @@ class Caltech(VisionDataset):
         Returns:
             tuple: (sample, target) where target is class_index of the target class.
         '''
-        image = pil_loader(os.path.join(self.split_path, self.dataset.iloc[ind, 0]))
-        label = self.dataset.iloc[ind, 1]
+        image = pil_loader(os.path.join(self.split_path, self.dataset.iloc[index, 0]))
+        label = self.dataset.iloc[index, 1]
 
         # Applies preprocessing when accessing the image
         if self.transform is not None:
