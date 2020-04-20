@@ -22,11 +22,10 @@ class Caltech(VisionDataset):
         self.split = split + '.txt' # This defines the split you are going to use
                            # (split files are called 'train.txt' and 'test.txt'
             
-        self.split_path = os.path.join(self.root.split('/')[0], self.split) #train.txt file path
-            
         self.root = root
         self.transform = transform
         self.target_transform = target_transform
+        self.split_path = os.path.join(self.root.split('/')[0], self.split) #train.txt file path
         
         label_counter  = 0
         labels_dict ={}
