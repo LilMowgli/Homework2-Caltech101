@@ -33,9 +33,9 @@ class Caltech(VisionDataset):
         labels = []
         img_paths = []
            
-        paths = np.loadtxt(self.split_path, dtype=str)
+        paths = np.loadtxt(self.split_path, dtype=str) #array with paths in the form 'class_name/imagexxxx.jpg'
         for path in paths:
-            fields = path.split('/')
+            fields = path.split('/') #fields[0] = class_name
             if fields[0]!='BACKGROUND_Google': #drop BACKGROUND_Google folder
                 if fields[0] in labels_dict: #if label already met
                     labels.append(labels_dict[fields[0]]) #assign corresponding label
@@ -43,7 +43,7 @@ class Caltech(VisionDataset):
                 else:
                     labels_dict[fields[0]] = label_counter; #add new label to the dictionary
                     labels.append(label_counter); #assign corresponding label
-                    img_paths.append(path)
+                    img_paths.append(path) #assign corresponding image path
                     label_counter += 1 #increment label counter
                 
         self.dataset = pd.DataFrame({'path': img_paths, 'label': label})
