@@ -82,5 +82,5 @@ class Caltech(VisionDataset):
         return length
         
         '''
-        return len(self.dataset)
-        
+        length = len(self.dataset)
+        return length
