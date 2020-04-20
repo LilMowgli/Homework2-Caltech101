@@ -81,5 +81,6 @@ class Caltech(VisionDataset):
         length = ... # Provide a way to get the length (number of elements) of the dataset
         return length
         
+        '''
         return len(self.dataset)
         
