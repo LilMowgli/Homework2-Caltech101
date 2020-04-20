@@ -48,6 +48,7 @@ class Caltech(VisionDataset):
                 
         self.dataset = pd.DataFrame({'path': img_paths, 'label': label})
         self.length = len(self.dataset)
+        print(self.length)
 
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
