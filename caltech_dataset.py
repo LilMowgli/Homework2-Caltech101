@@ -16,12 +16,14 @@ def pil_loader(path):
 
 
 class Caltech(VisionDataset):
-    def __init__(self, root, split='train', transform=None, target_transform=None):
+    def __init__(self, root, split='train', transform=None, target_transform=None, shuffle = True, random_state = None): 
+        
         super(Caltech, self).__init__(root, transform=transform, target_transform=target_transform)
 
         self.split = split + '.txt' # This defines the split you are going to use
                            # (split files are called 'train.txt' and 'test.txt'
         
+    
         self.root = root
         self.transform = transform
         self.target_transform = target_transform
@@ -48,8 +50,9 @@ class Caltech(VisionDataset):
         self.dataset = pd.DataFrame({'path': img_paths, 'label': labels})
         
         #if dataset = training set, in order to have a balanced split between train and validation set, shuffle its rows
-        if self.split == 'train.txt':
-            self.dataset = self.dataset.sample(frac=1)
+        if shuffle: 
+            self.random_state = random_state
+            self.dataset = self.dataset.sample(frac=1, random_state = self.random_state)
         
 
         '''
