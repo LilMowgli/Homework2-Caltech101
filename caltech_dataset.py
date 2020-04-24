@@ -46,6 +46,11 @@ class Caltech(VisionDataset):
                     label_counter += 1 #increment label counter
                 
         self.dataset = pd.DataFrame({'path': img_paths, 'label': labels})
+        
+        #if dataset = training set, in order to have a balanced split between train and validation set, shuffle its rows
+        if self.split == 'train.txt':
+            self.dataset = self.dataset.sample(frac=1)
+        
 
         '''
         - Here you should implement the logic for reading the splits files and accessing elements
