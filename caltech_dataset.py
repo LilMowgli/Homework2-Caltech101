@@ -20,14 +20,11 @@ class Caltech(VisionDataset):
         
         super(Caltech, self).__init__(root, transform=transform, target_transform=target_transform)
 
-        self.split = split + '.txt' # This defines the split you are going to use
-                           # (split files are called 'train.txt' and 'test.txt'
-        
-    
+        self.split = split + '.txt' # Defines the split: train or test
         self.root = root
         self.transform = transform
         self.target_transform = target_transform
-        self.split_path = os.path.join(self.root.split('/')[0], self.split) #train.txt file path
+        self.split_path = os.path.join(self.root.split('/')[0], self.split) # split file path
         
         label_counter  = 0
         labels_dict ={}
