@@ -72,8 +72,7 @@ class Caltech(VisionDataset):
         '''
         image = pil_loader(os.path.join(self.root, self.dataset.iloc[index, 0]))
         label = self.dataset.iloc[index, 1]
-        print(index)
-
+        
         # Applies preprocessing when accessing the image
         if self.transform is not None:
             image = self.transform(image)
