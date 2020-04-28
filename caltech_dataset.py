@@ -16,7 +16,7 @@ def pil_loader(path):
 
 
 class Caltech(VisionDataset):
-    def __init__(self, root, split='train', transform=None, target_transform=None, shuffle = False, random_state = None): 
+    def __init__(self, root, split='train', transform=None, target_transform=None): 
         
         super(Caltech, self).__init__(root, transform=transform, target_transform=target_transform)
 
@@ -45,11 +45,6 @@ class Caltech(VisionDataset):
                     label_counter += 1 #increment label counter
                 
         self.dataset = pd.DataFrame({'path': img_paths, 'label': labels})
-        
-        #if dataset = training set, in order to have a balanced split between train and validation set, shuffle its rows
-        if shuffle: 
-            self.random_state = random_state
-            self.dataset = self.dataset.sample(frac=1, random_state = self.random_state)
         
 
         '''
