@@ -1,4 +1,3 @@
-# @todo: put in model package once finished
 
 class Manager():
 
@@ -9,15 +8,6 @@ class Manager():
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
         self.test_dataloader = test_dataloader
-
-    def increment_classes(self, n=10):
-        """Add n classes in the final fc layer"""
-        in_features = self.net.linear.in_features  # size of each input sample
-        out_features = self.net.linear.out_features  # size of each output sample
-        weight = self.net.linear.weight.data
-
-        self.net.linear = nn.Linear(in_features, out_features+n)
-        self.net.linear.weight.data[:out_features] = weight
 
     def do_batch(self, optimizer, batch, labels):
         """Runs model for one batch."""
@@ -107,10 +97,10 @@ class Manager():
         self.net.to(self.device)
         cudnn.benchmark  # Calling this optimizes runtime
 
-        train_loss_history = []
-        train_accuracy_history = []
-        val_loss_history = []
-        val_accuracy_history = []
+        train_loss_history = {}
+        train_accuracy_history = {}
+        val_loss_history = {}
+        val_accuracy_history = {}
 
         for epoch in range(num_epochs):
 
@@ -120,19 +110,19 @@ class Manager():
             if validation:
               val_loss, val_accuracy = self.validate()
 
-              train_loss_history.append(train_loss)
-              train_accuracy_history.append(train_accuracy)
-              val_loss_history.append(val_loss)
-              val_accuracy_history.append(val_accuracy) 
+              train_loss_history[epoch+1] = train_loss
+              train_accuracy_history[epoch+1] = train_accuracy
+              val_loss_history[epoch+1] = val_loss
+              val_accuracy_history[epoch+1] = val_accuracy 
             else:
-              train_loss_history.append(train_loss)
-              train_accuracy_history.append(train_accuracy)
+              train_loss_history[epoch+1] = train_loss
+              train_accuracy_history[epoch+1] = train_accuracy
 
         if validation:
           return (train_loss_history, train_accuracy_history,
                 val_loss_history, val_accuracy_history)
         
-        return (train_loss_history, train_accuracy_history)
+        return (self.net)
 
     def test(self):
 
@@ -159,6 +149,4 @@ class Manager():
         accuracy = running_corrects / \
             float(total)  
 
-        print('Test Accuracy: {}'.format(accuracy))
-
-        return accuracy
+        print('\nTest Accuracy: {}'.format(accuracy))
