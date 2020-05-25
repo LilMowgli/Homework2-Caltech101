@@ -10,6 +10,7 @@ class Manager():
     def __init__(self, device, net, criterion, train_dataloader, val_dataloader, test_dataloader):
         self.device = device
         self.net = net
+        self.best_model = self.net
         self.criterion = criterion
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
@@ -114,21 +115,29 @@ class Manager():
                 optimizer, scheduler, epoch+1)  # Epochs start counting form 1
             # Validate at each epoch
             if validation:
-              val_loss, val_accuracy = self.validate()
+                val_loss, val_accuracy = self.validate()
 
-              train_loss_history[epoch+1] = train_loss
-              train_accuracy_history[epoch+1] = train_accuracy
-              val_loss_history[epoch+1] = val_loss
-              val_accuracy_history[epoch+1] = val_accuracy 
+                train_loss_history[epoch+1] = train_loss
+                train_accuracy_history[epoch+1] = train_accuracy
+                val_loss_history[epoch+1] = val_loss
+                val_accuracy_history[epoch+1] = val_accuracy
+            
+                # Best validation model
+                if val_accuracy > best_accuracy:
+                    best_accuracy = val_accuracy
+                    self.best_model = self.net
+                    best_epoch = epoch
+                    print('Best model updated\n')
+                
             else:
-              train_loss_history[epoch+1] = train_loss
-              train_accuracy_history[epoch+1] = train_accuracy
+                train_loss_history[epoch+1] = train_loss
+                train_accuracy_history[epoch+1] = train_accuracy
 
         if validation:
-          return (train_loss_history, train_accuracy_history,
+            return (train_loss_history, train_accuracy_history,
                 val_loss_history, val_accuracy_history)
         
-        return (self.net)
+        return (train_loss_history, train_accuracy_history)
 
     def test(self):
 
