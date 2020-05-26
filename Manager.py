@@ -115,6 +115,10 @@ class Manager():
                 optimizer, scheduler, epoch+1)  # Epochs start counting form 1
             # Validate at each epoch
             if validation:
+                
+                self.best_loss = 1e-2
+                self.best_epoch = 0
+                
                 val_loss, val_accuracy = self.validate()
 
                 train_loss_history[epoch+1] = train_loss
@@ -123,10 +127,10 @@ class Manager():
                 val_accuracy_history[epoch+1] = val_accuracy
             
                 # Best validation model
-                if val_accuracy > best_accuracy:
-                    best_accuracy = val_accuracy
+                if val_accuracy < self.best_loss:
+                    self.best_loss = val_accuracy
                     self.best_model = self.net
-                    best_epoch = epoch
+                    self.best_epoch = epoch
                     print('Best model updated\n')
                 
             else:
